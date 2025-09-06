@@ -1,0 +1,42 @@
+Company Knowledge Base
+======================
+
+ACCOUNT & LOGIN ISSUES:
+- Password Reset: Direct users to /reset-password page. Password reset emails may take up to 24 hours to propagate. If issues persist, check spam folder or contact support.
+- Account Locked: Accounts are automatically locked after 5 failed login attempts. Unlock time is 30 minutes or contact support for immediate unlock.
+- Two-Factor Authentication: Help users set up 2FA via Settings > Security. Backup codes should be saved securely.
+- Account Recovery: For forgotten emails, we need phone number or alternate email for verification.
+
+BILLING & PAYMENTS:
+- Invoice Queries: Always request order ID and transaction ID for faster resolution. Include billing address for verification.
+- Refunds: Standard refund processing time is 5-7 business days. Express refunds available for urgent cases (1-2 days).
+- Payment Failed: Check card expiry, billing address match, and sufficient funds. Alternative payment methods: PayPal, bank transfer.
+- Subscription Issues: Pro plans include 24/7 support, unlimited storage, and premium features. Downgrades take effect next billing cycle.
+
+TECHNICAL SUPPORT:
+- Browser Issues: Clear cache/cookies, try incognito mode, update browser. Supported browsers: Chrome 90+, Firefox 88+, Safari 14+.
+- Mobile App: Latest version required. Force-stop app, clear app data, or reinstall if issues persist.
+- Data Sync: Sync typically occurs within 5 minutes. Manual sync available in Settings. Check internet connection.
+- Performance: For slow loading, check internet speed (minimum 5 Mbps required), close other applications, restart device.
+
+PRODUCT FEATURES:
+- File Upload: Maximum file size 50MB per file, 500MB total per account. Supported formats: PDF, DOC, JPG, PNG, MP4.
+- Collaboration: Share links expire after 30 days. Team workspaces support up to 100 members with role-based permissions.
+- Data Export: Full data export available in Settings > Data. Processing time: 24-48 hours for large accounts.
+- Integration: API available for Enterprise plans. OAuth 2.0 authentication required. Rate limit: 1000 requests/hour.
+
+SECURITY & PRIVACY:
+- Data Protection: All data encrypted in transit and at rest. GDPR compliant with right to deletion within 30 days.
+- Suspicious Activity: Immediately reset password, enable 2FA, and review recent activity log in Settings > Security.
+- Privacy Settings: Control data sharing in Settings > Privacy. Anonymous usage analytics can be disabled.
+
+ESCALATION PROCEDURES:
+- Critical Issues: Direct to priority support queue with "URGENT" tag. Response time: 1 hour during business hours.
+- Frustrated Customers: Acknowledge frustration, apologize for inconvenience, offer compensation if appropriate.
+- Technical Bugs: Collect browser info, error messages, steps to reproduce. Create support ticket for development team.
+
+COMMON SOLUTIONS:
+- "Something went wrong": Generic error - ask user to retry, check internet, clear browser cache.
+- "Page not loading": Check internet connection, try different browser, disable ad blockers.
+- "Can't find feature": Provide exact navigation path, include screenshots if helpful.
+- "Slow performance": Close unused tabs, check system resources, suggest premium plan for better performance.

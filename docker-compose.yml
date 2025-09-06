@@ -1,0 +1,38 @@
+services:
+  email-assistant:
+    build: .
+    container_name: email-support-assistant
+    ports:
+      - "8501:8501"
+    volumes:
+      # Mount secrets directory for Gmail credentials
+      - ./secrets:/app/secrets:ro
+      # Mount database directory for persistence
+      - ./db:/app/db
+      # Mount data directory for knowledge base updates
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Optional: Add a database service if you want to use PostgreSQL instead of SQLite
+  # database:
+  #   image: postgres:15
+  #   container_name: email-assistant-db
+  #   environment:
+  #     POSTGRES_DB: email_assistant
+  #     POSTGRES_USER: emailuser
+  #     POSTGRES_PASSWORD: your_password_here
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:
