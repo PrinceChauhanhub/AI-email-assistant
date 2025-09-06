@@ -293,3 +293,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - All email data is stored locally in SQLite database
 - Knowledge base can be customized for your specific support needs
 - Dashboard provides real-time monitoring and analytics  
+
+## ✅ Notes
+🎥 [Watch Video for Explaination](https://drive.google.com/file/d/1SBWvIw5WaENKYBS0yeM23uAGRdbFA9zk/view?usp=sharing)
