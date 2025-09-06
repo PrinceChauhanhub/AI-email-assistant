@@ -1,5 +1,11 @@
 # 📧 AI-Powered Email Support Assistant
 
+## 🌐 Live Demo
+Try the deployed app on Streamlit Cloud: [ai-email-assistant.streamlit.app](https://ai-email-assistant.streamlit.app/)
+
+## 📦 GitHub Repository
+Find the source code here: [github.com/PrinceChauhanhub/AI-email-assistant](https://github.com/PrinceChauhanhub/AI-email-assistant)
+
 This project is an **Email Support Assistant** built with **Hugging Face Transformers**, **Sentence Transformers**, and the **Gmail API**.  
 It automatically processes customer support emails, analyzes sentiment and priority, and generates intelligent responses using advanced AI technologies.
 
