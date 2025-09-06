@@ -1,8 +1,5 @@
 # 📧 AI-Powered Email Support Assistant
 
-## 🌐 Live Demo
-Try the deployed app on Streamlit Cloud: [ai-email-assistant.streamlit.app](https://ai-email-assistant.streamlit.app/)
-
 ## 📦 GitHub Repository
 Find the source code here: [github.com/PrinceChauhanhub/AI-email-assistant](https://github.com/PrinceChauhanhub/AI-email-assistant)
 

@@ -54,7 +54,29 @@ class RAGSystem:
         
         # Get top-k most similar chunks
         top_indices = np.argsort(similarities)[-top_k:][::-1]
-        relevant_chunks = [self.knowledge_chunks[i] for i in top_indices if similarities[i] > 0.1]
+        relevant_chunks = []
+        
+        for i in top_indices:
+            if similarities[i] > 0.15:  # Higher threshold for better relevance
+                chunk = self.knowledge_chunks[i]
+                # Clean up the chunk - remove redundant headers and format better
+                if chunk.startswith("ACCOUNT & LOGIN ISSUES:"):
+                    chunk = chunk.replace("ACCOUNT & LOGIN ISSUES:", "").strip()
+                elif chunk.startswith("BILLING & PAYMENTS:"):
+                    chunk = chunk.replace("BILLING & PAYMENTS:", "").strip()
+                elif chunk.startswith("TECHNICAL SUPPORT:"):
+                    chunk = chunk.replace("TECHNICAL SUPPORT:", "").strip()
+                elif chunk.startswith("PRODUCT FEATURES:"):
+                    chunk = chunk.replace("PRODUCT FEATURES:", "").strip()
+                
+                # Ensure complete sentences
+                if not chunk.endswith('.'):
+                    # Try to find the last complete sentence
+                    last_period = chunk.rfind('.')
+                    if last_period > len(chunk) * 0.7:  # Only if the period is near the end
+                        chunk = chunk[:last_period + 1]
+                
+                relevant_chunks.append(chunk.strip())
         
         return relevant_chunks
     

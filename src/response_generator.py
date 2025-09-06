@@ -8,18 +8,42 @@ OPENAI_KEY = os.environ.get("OPENAI_API_KEY")
 def _simple_template(email, processed, rag_context=None, contact_info=None):
     """Enhanced template with RAG context and empathetic responses"""
     
-    # Determine tone based on sentiment and frustration
-    if processed.get("sentiment") == "negative" or processed.get("is_frustrated", False):
-        tone = "We sincerely apologize for the inconvenience and understand your frustration"
-        empathy = "Your experience is not meeting our standards, and we want to make this right immediately."
-    else:
-        tone = "Thank you for reaching out to us"
-        empathy = "We're here to help and ensure you have the best experience possible."
+    # Priority-based tone selection
+    priority = processed.get("priority_label", "Low")
     
-    # Include relevant knowledge base context
+    if priority == "Urgent":
+        tone = "Thank you for contacting us urgently"
+        empathy = "We understand this requires immediate attention and our team is prioritizing your request."
+        response_time = "within 1 hour"
+    elif priority == "Medium":
+        if processed.get("sentiment") == "negative" or processed.get("is_frustrated", False):
+            tone = "We apologize for any inconvenience you're experiencing"
+            empathy = "We want to resolve this quickly for you."
+        else:
+            tone = "Thank you for reaching out to us"
+            empathy = "We're happy to help with your inquiry."
+        response_time = "within 4-6 hours"
+    else:  # Low priority
+        tone = "Thank you for contacting our support team"
+        empathy = "We appreciate your patience as we work to assist you."
+        response_time = "within 24 hours"
+    
+    # Include relevant knowledge base context (with complete text)
     context_section = ""
-    if rag_context:
-        context_section = f"\nBased on your inquiry, here's what we can help with:\n{rag_context[:200]}...\n"
+    if rag_context and len(rag_context) > 0:
+        # Find the best relevant context
+        relevant_info = ""
+        for context in rag_context:
+            if context and len(context.strip()) > 10:  # Make sure it's not empty
+                relevant_info = context.strip()
+                break
+        
+        if relevant_info:
+            # Limit to reasonable length but keep complete sentences
+            if len(relevant_info) > 200:
+                sentences = relevant_info.split('.')
+                relevant_info = '. '.join(sentences[:2]) + '.'
+            context_section = f"\nRelevant information:\n{relevant_info}\n"
     
     # Include contact info if found
     contact_section = ""
@@ -27,8 +51,8 @@ def _simple_template(email, processed, rag_context=None, contact_info=None):
         contact_section = "\nWe have your contact information on file for updates.\n"
     
     urgency_response = ""
-    if processed.get("priority_label") == "Urgent":
-        urgency_response = "Given the urgent nature of your request, we're prioritizing this for immediate attention. "
+    if priority == "Urgent":
+        urgency_response = "URGENT: We're escalating this to our priority support team immediately. "
     
     body = f"""{tone},
 
@@ -36,13 +60,10 @@ def _simple_template(email, processed, rag_context=None, contact_info=None):
 
 Subject: {email.get('subject')}
 
-Summary of your issue:
-{processed.get('summary', 'We have reviewed your inquiry carefully.')}
-{context_section}
+{processed.get('summary', 'We have reviewed your inquiry carefully.')}{context_section}
 {urgency_response}Next steps:
-1) Our technical team is investigating this issue and will update you within 2-4 hours.
-2) If you need immediate assistance, please call our priority support line.
-3) Any additional details (screenshots, error messages, order ID) will help us resolve this faster.
+1) Our technical team will update you {response_time}.
+2) {'Priority escalation in progress.' if priority == 'Urgent' else 'If you need immediate assistance, please call our support line.'}
 {contact_section}
 Best regards,
 Customer Support Team
@@ -72,7 +93,7 @@ def _build_prompt(email, processed, kb_snippets=None, contact_info=None):
         contact_note = f"Customer contact info available: {contact_info}"
     
     prompt = f"""
-You are an expert customer support agent. Write a professional, empathetic, and solution-focused response (max 200 words).
+You are a customer support agent. Write a CONCISE, helpful response (MAX 150 words).
 
 CUSTOMER EMAIL:
 Subject: {email.get('subject')}
@@ -89,15 +110,24 @@ KNOWLEDGE BASE CONTEXT:
 {kb_text}
 
 REQUIREMENTS:
-1. Address the customer's specific concerns
-2. Use relevant knowledge base information
-3. Maintain professional yet warm tone
-4. Provide clear next steps
-5. If customer is frustrated, acknowledge and apologize
-6. Include support ticket reference
-7. Offer additional assistance channels if urgent
+1. Keep response under 150 words total
+2. Address the customer's specific question directly
+3. Use knowledge base info if relevant
+4. Match tone to priority level
+5. Provide 1-2 clear next steps
+6. Include ticket reference
+7. Be specific, not generic
 
-Write the response now:
+Write a focused, helpful response: 
+6. Include support ticket reference
+7. Keep response focused and avoid generic language
+
+Priority-specific guidelines:
+- URGENT: Immediate escalation, direct contact promise, quick resolution steps
+- MEDIUM: Standard helpful response with clear timeline
+- LOW: Patient, thorough response focusing on education
+
+Write a specific response addressing their exact issue:
 """
     return prompt
 
@@ -129,10 +159,10 @@ class ResponseGenerator:
                 prompt = _build_prompt(email, processed, kb_snippets, contact_info)
                 resp = openai.ChatCompletion.create(
                     model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
-                    messages=[{"role": "system", "content": "You are a helpful support agent."},
+                    messages=[{"role": "system", "content": "You are a helpful support agent. Keep responses concise and under 150 words."},
                               {"role": "user", "content": prompt}],
-                    max_tokens=300,
-                    temperature=0.2
+                    max_tokens=200,  # Reduced to ensure complete responses
+                    temperature=0.1  # More focused responses
                 )
                 return resp["choices"][0]["message"]["content"].strip()
             except Exception as e:
