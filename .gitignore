@@ -11,10 +11,10 @@ client_secret_*.json
 .env.production
 
 # Database Files (contains user data)
-db/
 *.db
 *.sqlite
 *.sqlite3
+!db/emails.db
 
 # Virtual Environment
 venv/
