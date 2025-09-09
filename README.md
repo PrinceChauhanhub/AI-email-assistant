@@ -246,28 +246,6 @@ The system processes emails containing these keywords in the subject:
 
 ---
 
-## 🚀 Deployment
-
-### Local Development
-```bash
-streamlit run src/dashboard.py
-```
-
-### Cloud Platforms
-- **Heroku**: Deploy with Python buildpack
-- **AWS**: Use EC2 or Elastic Beanstalk
-- **Google Cloud**: Deploy with App Engine
-- **DigitalOcean**: App Platform with Python support
-
-### Production Considerations
-- Set up environment variables for secrets
-- Use external database for scalability (PostgreSQL)
-- Implement monitoring and logging
-- Set up backup strategies for email data
-- Configure HTTPS for secure access
-
----
-
 ## 🤝 Contributing
 
 1. Fork the repository
